@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Grade 9 Association</title>
+  <link rel="icon" href="logo.png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+    /* Reset and base */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      background: #121821;
+      font-family: 'Inter', sans-serif;
+      color: #e1e8f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      max-height: 600px;
+      padding: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+    #container {
+      background: #1f2937;
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(24,71,255, 0.5);
+      width: 320px;
+      max-width: 100%;
+      padding: 30px 25px 45px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+    img#user-icon {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 30px;
+      box-shadow: 0 6px 16px rgba(56, 130, 255, 0.6);
+      filter: drop-shadow(0 0 8px #3b82f6);
+      transition: transform 0.4s ease;
+    }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: 2px solid #374151;
+      background-color: #111827;
+      color: #e1e8f0;
+      font-size: 16px;
+      transition: border-color 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
+    }
+    input[type="text"]:focus, input[type="password"]:focus {
+      border-color: #3b82f6;
+      outline: none;
+      box-shadow: 0 0 8px #3b82f6;
+      background-color: #1e293b;
+    }
+    input::placeholder {
+      color: #6b7280;
+    }
+    button#redirect-btn {
+      display: none;
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 14px 0;
+      width: 100%;
+      font-size: 18px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 6px 12px rgba(37, 99, 235, 0.6);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+      user-select: none;
+      text-shadow: 0 0 5px #93c5fd;
+    }
+    button#redirect-btn:hover {
+      background: #1e40af;
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.9);
+      transform: translateY(-2px);
+    }
+    #message {
+      color: #f87171;
+      margin-bottom: 16px;
+      height: 20px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 14px;
+      min-height: 20px;
+      user-select: none;
+    }
+
+    @media (max-width: 350px) {
+      #container {
+        width: 90vw;
+        padding: 24px 18px 30px;
+      }
+    }
+
+    /* Decorative images in corners */
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.1;
+      background-repeat: no-repeat;
+      background-size: 220px 220px;
+      transition: opacity 0.6s ease;
+      filter: drop-shadow(0 0 6px #3b82f6);
+    }
+    body::before {
+      bottom: 0;
+      left: 0;
+      width: 300px;
+      height: 210px;
+      background-image: url('https://www.pngall.com/wp-content/uploads/13/Github-Logo.png');
+      background-position: left bottom;
+      mix-blend-mode: screen;
+    }
+    body::after {
+      bottom: 0;
+      right: 0;
+      width: 220px;
+      height: 220px;
+      background-image: url('https://download.logo.wine/logo/Mozilla_Public_License/Mozilla_Public_License-Logo.wine.png');
+      background-position: right bottom;
+      transform: rotate(0deg);
+      mix-blend-mode: screen;
+    }
+
+    /* Lock break animation */
+
+    #lock-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 150px;
+      height: 150px;
+      margin-left: -75px;
+      margin-top: -75px;
+      z-index: 10;
+      display: none;
+      filter: drop-shadow(0 0 12px #3b82f6);
+    }
+
+    /* Lock SVG styles */
+    svg#lock {
+      width: 100%;
+      height: 100%;
+      fill: none;
+      stroke: #3b82f6;
+      stroke-width: 4;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      stroke-opacity: 0.9;
+      filter: drop-shadow(0 0 5px #3b82f6);
+    }
+
+    /* Animation keyframes for cracks */
+
+    @keyframes crack1 {
+      0% { stroke-dashoffset: 100; }
+      100% { stroke-dashoffset: 0; }
+    }
+    @keyframes crack-break {
+      0% { opacity: 1; transform: scale(1) rotate(0deg); }
+      100% { opacity: 0; transform: scale(1.8) rotate(60deg); }
+    }
+    @keyframes lock-fadeout {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0.4) translateY(40px); }
+    }
+
+    .crack-path {
+      stroke: #60a5fa;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      animation-fill-mode: forwards;
+      animation-timing-function: ease-out;
+      animation-duration: 0.6s;
+    }
+
+    .crack1 {
+      animation-name: crack1;
+      animation-delay: 0s;
+    }
+    .crack2 {
+      animation-name: crack1;
+      animation-delay: 0.15s;
+    }
+    .crack3 {
+      animation-name: crack1;
+      animation-delay: 0.3s;
+    }
+
+    /* Animate cracks after validation */
+    .show-lock #lock-container {
+      display: block;
+      animation: lock-fadein 0.3s ease forwards;
+    }
+
+    /* Smooth fade out of content */
+    #container.fade-out {
+      opacity: 0;
+      transform: scale(0.90);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    /* Glow effect on button when shown */
+    #redirect-btn.show {
+      animation: glowPulse 2s infinite;
+    }
+    @keyframes glowPulse {
+      0%, 100% {
+        box-shadow: 0 6px 12px rgba(37, 99, 235, 0.6);
+      }
+      50% {
+        box-shadow: 0 12px 24px rgba(37, 99, 235, 0.9);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="container" role="main" aria-labelledby="login-title">
+    <img id="user-icon" src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt="Default user icon" />
+    <input type="text" id="userid" placeholder="Enter User ID" aria-label="User ID" autocomplete="username" />
+    <input type="password" id="password" placeholder="Enter Password" aria-label="Password" autocomplete="current-password" />
+    <div id="message" aria-live="polite"></div>
+    <button id="redirect-btn" type="button" aria-label="Proceed to website">Proceed</button>
+  </div>
+
+  <!-- Lock animation container -->
+  <div id="lock-container" aria-hidden="true" role="presentation">
+    <svg id="lock" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" >
+      <!-- Lock body -->
+      <rect x="18" y="28" width="28" height="28" rx="6" ry="6" fill="#2563eb" stroke="#3b82f6" stroke-width="3"/>
+      <!-- Lock shackle -->
+      <path id="shackle" d="M20 28v-8a12 12 0 0 1 24 0v8" stroke="#3b82f6" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <!-- Crack lines -->
+      <path class="crack-path crack1" d="M30 28l4 8" stroke="#60a5fa"/>
+      <path class="crack-path crack2" d="M34 28l-5 6" stroke="#60a5fa"/>
+      <path class="crack-path crack3" d="M38 28l-6 9" stroke="#60a5fa"/>
+    </svg>
+  </div>
+
+  <script>
+    // Editable user credentials: userId => password
+    const userCredentials = {
+      "test": "test",
+      "guest": "guestpass",
+      "admin": "admin123",
+      // Add or remove user IDs and passwords here easily
+    };
+
+    const useridInput = document.getElementById('userid');
+    const passwordInput = document.getElementById('password');
+    const messageDiv = document.getElementById('message');
+    const redirectBtn = document.getElementById('redirect-btn');
+    const container = document.getElementById('container');
+    const lockContainer = document.getElementById('lock-container');
+    const lockSvg = document.getElementById('lock');
+
+    // The URL to redirect after successful login
+    const redirectUrl = "indexhub.html";
+
+    function validateLogin() {
+      const enteredUser = useridInput.value.trim();
+      const enteredPassword = passwordInput.value;
+
+      if (enteredUser.length === 0 || enteredPassword.length === 0) {
+        messageDiv.textContent = "";
+        redirectBtn.style.display = "none";
+        redirectBtn.classList.remove('show');
+        return;
+      }
+
+      if (userCredentials.hasOwnProperty(enteredUser)) {
+        if (userCredentials[enteredUser] === enteredPassword) {
+          messageDiv.textContent = "";
+          redirectBtn.style.display = "block";
+          redirectBtn.classList.add('show');
+        } else {
+          messageDiv.textContent = "Incorrect password.";
+          redirectBtn.style.display = "none";
+          redirectBtn.classList.remove('show');
+        }
+      } else {
+        messageDiv.textContent = "User ID not found.";
+        redirectBtn.style.display = "none";
+        redirectBtn.classList.remove('show');
+      }
+    }
+
+    useridInput.addEventListener('input', validateLogin);
+    passwordInput.addEventListener('input', validateLogin);
+
+    redirectBtn.addEventListener('click', function() {
+      startLockAnimationAndRedirect();
+    });
+
+    // Accessibility: pressing Enter on password triggers validation and button if valid
+    passwordInput.addEventListener('keydown', function(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        validateLogin();
+        if (redirectBtn.style.display === "block") {
+          startLockAnimationAndRedirect();
+        }
+      }
+    });
+
+    // Animation and transition logic
+    function startLockAnimationAndRedirect() {
+      // Disable inputs and button
+      useridInput.disabled = true;
+      passwordInput.disabled = true;
+      redirectBtn.disabled = true;
+
+      // Animate user icon (slight scale up for effect)
+      const userIcon = document.getElementById('user-icon');
+      userIcon.style.transform = 'scale(1.1)';
+
+      // Fade out container form smoothly
+      container.classList.add('fade-out');
+
+      // Show lock animation container
+      lockContainer.style.display = 'block';
+
+      // Animate cracks sequentially with JS timing to mimic "breaking"
+
+      const cracks = lockSvg.querySelectorAll('.crack-path');
+      cracks.forEach(path => path.style.strokeDashoffset = 100);
+      
+      let delay = 0;
+      cracks.forEach((path, i) => {
+        setTimeout(() => {
+          path.style.transition = 'stroke-dashoffset 0.6s ease-out';
+          path.style.strokeDashoffset = '0';
+        }, delay);
+        delay += 150;
+      });
+
+      // After animation of cracks, animate lock break out
+      setTimeout(() => {
+        // Animate lock fade out and rotation + scale up - break effect
+        lockSvg.style.transition = 'transform 0.8s ease, opacity 0.8s ease';
+        lockSvg.style.transformOrigin = 'center';
+        lockSvg.style.transform = 'scale(1.8) rotate(60deg)';
+        lockSvg.style.opacity = '0';
+      }, delay + 650);
+
+      // Redirect after animation ends (~1.8 seconds from start)
+      setTimeout(() => {
+        window.location.href = redirectUrl;
+      }, delay + 1600);
+    }
+  </script>
+</body>
+</html>
+</content>
+</create_file>
