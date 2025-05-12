@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Photo Gallery</title>
+<link rel="icon" href="logo.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+  
+  :root {
+    --blue: #4a90e2;
+    --dark-bg: #121212;
+    --dark-bg-alt: #1e1e1e;
+    --dark-gray: #272727;
+    --text-light: #e0e0e0;
+    --shadow-blue: rgba(74, 144, 226, 0.6);
+    --glow-blue: rgba(74, 144, 226, 0.8);
+  }
+
+  /* Reset & base styles */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    background-color: var(--dark-bg);
+    color: var(--text-light);
+    font-family: 'Montserrat', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+    padding: 2rem 0 4rem;
+  }
+
+  h1 {
+    margin: 0 0 2rem;
+    font-weight: 700;
+    font-size: 2.75rem;
+    letter-spacing: 0.12em;
+    color: var(--blue);
+    user-select: none;
+    text-shadow:
+      0 0 6px var(--glow-blue),
+      0 0 12px var(--glow-blue),
+      0 0 18px var(--glow-blue);
+    text-align: center;
+  }
+
+  /* Gallery Container - center horizontally and add fade-in stagger */
+  .gallery-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+  .gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 1.8rem;
+    max-width: 1200px;
+    user-select: none;
+    animation: galleryFadeIn 1s ease forwards;
+    opacity: 0;
+  }
+
+  /* Animation for gallery container fade-in */
+  @keyframes galleryFadeIn {
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* Gallery item preview */
+  .gallery-item {
+    flex: 1 1 200px; /* flexible base width */
+    max-width: 220px;
+    height: 140px;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 10px;
+    border: 2.5px solid var(--blue);
+    box-shadow:
+      0 4px 10px var(--shadow-blue),
+      0 0 6px var(--blue);
+    background-color: var(--dark-bg-alt);
+    transition:
+      transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.4s ease,
+      filter 0.4s ease;
+    will-change: transform, box-shadow;
+    position: relative;
+  }
+
+  /* Subtle flicker glow animation on box-shadow */
+  @keyframes flickerGlow {
+    0%, 100% {
+      box-shadow:
+        0 4px 10px var(--shadow-blue),
+        0 0 6px var(--blue);
+    }
+    50% {
+      box-shadow:
+        0 6px 18px var(--shadow-blue),
+        0 0 12px var(--glow-blue);
+    }
+  }
+
+  /* On hover or focus, scale up with enhanced shadow and glow flicker */
+  .gallery-item:hover,
+  .gallery-item:focus-visible {
+    animation: flickerGlow 1.5s infinite alternate;
+    transform: scale(1.07);
+    box-shadow:
+      0 10px 30px var(--shadow-blue),
+      0 0 15px var(--glow-blue);
+    outline: none;
+    filter: brightness(1.1);
+    z-index: 5;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: filter 0.4s ease;
+    filter: brightness(0.88);
+    will-change: filter;
+  }
+  .gallery-item:hover img {
+    filter: brightness(1);
+  }
+
+  /* Lightbox Overlay */
+  .lightbox-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(18, 18, 18, 0.96);
+    backdrop-filter: brightness(0.75) saturate(1.3) contrast(1.25);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1100;
+    padding: 1rem;
+  }
+  .lightbox-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Lightbox Image Container */
+  .lightbox-image-container {
+    position: relative;
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 14px;
+    box-shadow:
+      0 0 45px var(--blue),
+      0 0 60px var(--blue);
+    overflow: hidden;
+    animation: lightroomPop 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Lightroom effect and zoom pop */
+  @keyframes lightroomPop {
+    0% {
+      filter: brightness(0.45) saturate(0.5) blur(10px);
+      transform: scale(0.68);
+      opacity: 0;
+    }
+    100% {
+      filter: brightness(1) saturate(1) blur(0);
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .lightbox-image-container img {
+    max-width: 90vw;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    display: block;
+    border-radius: 14px;
+    user-select: none;
+    pointer-events: none;
+    object-fit: contain;
+    filter: drop-shadow(0 0 6px var(--blue));
+    will-change: transform, filter;
+  }
+
+  /* Close Button */
+  .close-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--blue);
+    border: none;
+    color: var(--dark-bg);
+    font-size: 1.9rem;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    box-shadow:
+      0 0 15px var(--blue),
+      0 0 30px var(--blue);
+    transition:
+      background-color 0.3s ease,
+      transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+  }
+  .close-btn:hover,
+  .close-btn:focus {
+    background-color: #2e72d2;
+    transform: rotate(90deg) scale(1.1);
+    box-shadow:
+      0 0 24px var(--glow-blue),
+      0 0 40px var(--glow-blue);
+    outline: none;
+  }
+
+  /* Prevent background scrolling when overlay is open */
+  body.lightbox-open {
+    overflow: hidden;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--dark-bg);
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--blue);
+    border-radius: 12px;
+    border: 2px solid var(--dark-bg);
+  }
+</style>
+</head>
+<body>
+  <h1>Photo Gallery</h1>
+  <div class="gallery-wrapper">
+    <div class="gallery" role="list" aria-label="Image gallery">
+      <!-- Add or remove gallery items here by editing these divs -->
+      <div class="gallery-item" role="listitem" tabindex="0" aria-label="Open image 1">
+        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Mountain lake sunset" data-full="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=90" />
+      </div>
+      
+      <div class="gallery-item" role="listitem" tabindex="0" aria-label="Open image 2">
+        <img src="https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=400&q=80" alt="Foggy forest path" data-full="https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=1600&q=90" />
+      </div>
+      
+      <div class="gallery-item" role="listitem" tabindex="0" aria-label="Open image 3">
+        <img src="https://images.unsplash.com/photo-1520826243976-bb623c8eac0b?auto=format&fit=crop&w=400&q=80" alt="Desert dunes at sunset" data-full="https://images.unsplash.com/photo-1520826243976-bb623c8eac0b?auto=format&fit=crop&w=1600&q=90" />
+      </div>
+      
+      <div class="gallery-item" role="listitem" tabindex="0" aria-label="Open image 4">
+        <img src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=400&q=80" alt="Starry night sky" data-full="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1600&q=90" />
+      </div>
+      
+      <div class="gallery-item" role="listitem" tabindex="0" aria-label="Open image 5">
+        <img src="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=400&q=80" alt="Autumn lake reflections" data-full="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1600&q=90" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox Overlay -->
+  <div class="lightbox-overlay" aria-hidden="true" role="dialog" aria-label="Image preview">
+    <div class="lightbox-image-container">
+      <button class="close-btn" aria-label="Close image overlay" title="Close overlay">&times;</button>
+      <img src="" alt="" />
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const gallery = document.querySelector('.gallery');
+      const overlay = document.querySelector('.lightbox-overlay');
+      const overlayImage = overlay.querySelector('img');
+      const closeBtn = overlay.querySelector('.close-btn');
+
+      function openLightbox(imageSrc, altText) {
+        overlayImage.src = imageSrc;
+        overlayImage.alt = altText;
+        overlay.classList.add('visible');
+        document.body.classList.add('lightbox-open');
+        overlay.setAttribute('aria-hidden', 'false');
+        closeBtn.focus();
+      }
+
+      function closeLightbox() {
+        overlay.classList.remove('visible');
+        document.body.classList.remove('lightbox-open');
+        overlay.setAttribute('aria-hidden', 'true');
+        overlayImage.src = '';
+        overlayImage.alt = '';
+      }
+
+      gallery.addEventListener('click', e => {
+        const target = e.target.closest('.gallery-item img');
+        if (!target) return;
+
+        const fullSrc = target.getAttribute('data-full') || target.src;
+        const altText = target.alt || '';
+        openLightbox(fullSrc, altText);
+      });
+
+      gallery.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          const target = e.target.closest('.gallery-item');
+          if(!target) return;
+          const img = target.querySelector('img');
+          const fullSrc = img.getAttribute('data-full') || img.src;
+          openLightbox(fullSrc, img.alt);
+          e.preventDefault();
+        }
+      });
+
+      closeBtn.addEventListener('click', closeLightbox);
+
+      overlay.addEventListener('click', e => {
+        if (e.target === overlay) {
+          closeLightbox();
+        }
+      });
+
+      // Close on ESC key when overlay is open
+      window.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && overlay.classList.contains('visible')) {
+          closeLightbox();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

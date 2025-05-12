@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Achievements Gallery</title>
+<link rel="icon" href="logo.png">
+<style>
+  /* Reset and base */
+  @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@600&display=swap');
+  * {
+    box-sizing: border-box;
+  }
+  html, body {
+    margin: 0; padding: 0;
+    height: 100vh;
+    background: #0a122a;
+    color: #aad4ff;
+    font-family: 'Exo 2', sans-serif;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body::-webkit-scrollbar {
+    width: 8px;
+  }
+  body::-webkit-scrollbar-track {
+    background: #0a122a;
+  }
+  body::-webkit-scrollbar-thumb {
+    background: #1e3eff;
+    border-radius: 4px;
+  }
+
+  /* Container with blue border and blur shadow effect */
+  .page-container {
+    max-width: 1100px;
+    margin: 24px auto 36px auto;
+    padding: 20px 24px 30px 24px;
+    border: 6px solid #1e3eff;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #0a122a 0%, #141e4a 100%);
+    box-shadow:
+      0 0 35px #1e3effbb,
+      inset 0 0 40px #1e3eff88;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Header */
+  header {
+    margin-bottom: 24px;
+    text-align: center;
+    user-select: none;
+  }
+  header h1 {
+    font-size: 3rem;
+    letter-spacing: 4px;
+    color: #53aaff;
+    text-shadow:
+      0 0 10px #53aaff,
+      0 0 25px #53aaff;
+    animation: headerGlow 3.5s ease-in-out infinite alternate;
+    margin: 0;
+  }
+  @keyframes headerGlow {
+    0% {
+      text-shadow:
+        0 0 10px #53aaff,
+        0 0 25px #53aaff;
+    }
+    50% {
+      text-shadow:
+        0 0 40px #82b7ff,
+        0 0 70px #82b7ff,
+        0 0 100px #82b7ff;
+    }
+    100% {
+      text-shadow:
+        0 0 10px #53aaff,
+        0 0 25px #53aaff;
+    }
+  }
+
+  /* Button grid */
+  .button-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 24px 28px;
+    width: 100%;
+    justify-items: center;
+  }
+
+  /* Achievement button */
+  .achievement-btn {
+    width: 250px;
+    height: 72px;
+    background: linear-gradient(135deg, #053dbf, #0a56fe);
+    border: 3.5px solid #1e3eff;
+    border-radius: 16px;
+    color: #cce3ff;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-align: center;
+    line-height: 1.25;
+    cursor: pointer;
+    user-select: none;
+    box-shadow:
+      inset 0 0 10px #1e3effcc,
+      0 0 12px #2c5cffbb;
+    transition:
+      background 0.35s ease,
+      box-shadow 0.35s ease,
+      transform 0.3s cubic-bezier(0.2, 1, 0.3, 1),
+      color 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 14px;
+  }
+  .achievement-btn:hover,
+  .achievement-btn:focus-visible {
+    background: linear-gradient(135deg, #1a57ff, #3279ff);
+    box-shadow:
+      inset 0 0 15px #1e3effff,
+      0 0 28px #507affee;
+    color: #d5e4ff;
+    outline: none;
+    transform: translateY(-6px) scale(1.07);
+    text-shadow:
+      0 0 8px #a3c0ff;
+  }
+  .achievement-btn:active {
+    transform: translateY(1px) scale(0.95);
+    box-shadow:
+      inset 0 0 25px #1e3effdd,
+      0 0 18px #2c5cffcc;
+  }
+
+  /* Accessible focus ring */
+  .achievement-btn:focus-visible {
+    outline: 3px solid #3580ff;
+    outline-offset: 2px;
+  }
+
+  /* Modal popup container */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(10, 18, 42, 0.9);
+    backdrop-filter: blur(14px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .modal-window {
+    background: #111f4c;
+    border: 4px solid #3c66ff;
+    border-radius: 18px;
+    box-shadow:
+      0 0 45px #3379ffbb,
+      inset 0 0 22px #3c7affcc;
+    max-width: 460px;
+    width: 90vw;
+    padding: 36px 44px;
+    color: #dae4ff;
+    text-align: center;
+    transform: scale(0.65);
+    opacity: 0;
+    transition:
+      transform 0.36s cubic-bezier(0.2,1,0.3,1),
+      opacity 0.36s ease;
+    animation: popUp 0.45s forwards;
+    user-select: text;
+    position: relative;
+  }
+  .modal-overlay.active .modal-window {
+    opacity: 1;
+    transform: scale(1);
+  }
+  @keyframes popUp {
+    0% {
+      opacity: 0;
+      transform: scale(0.65);
+    }
+    70% {
+      transform: scale(1.1);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Modal header */
+  .modal-header {
+    font-size: 1.9rem;
+    font-weight: 800;
+    margin-bottom: 22px;
+    color: #68a0ff;
+    text-shadow: 0 0 15px #75aaff;
+    user-select: none;
+  }
+
+  /* Modal description text */
+  .modal-description {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    color: #c0d3ffcc;
+  }
+
+  /* Close button */
+  .close-btn {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    background: transparent;
+    border: 3px solid #4a7fff;
+    border-radius: 10px;
+    color: #87abff;
+    font-size: 1.7rem;
+    line-height: 1;
+    padding: 5px 14px;
+    font-weight: 900;
+    cursor: pointer;
+    filter: drop-shadow(0 0 4px #3a7fffaa);
+    transition:
+      color 0.3s ease,
+      border-color 0.3s ease,
+      transform 0.2s ease;
+  }
+  .close-btn:hover {
+    color: #b9d0ff;
+    border-color: #7fc3ff;
+    transform: scale(1.15);
+  }
+</style>
+</head>
+<body>
+  <div class="page-container" role="main">
+    <header>
+      <h1>Student Achievements</h1>
+    </header>
+    <section class="button-grid" aria-label="Student achievement buttons">
+      <!-- Buttons will be inserted here by JS -->
+    </section>
+  </div>
+
+  <!-- Modal popup -->
+  <div class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
+    <div class="modal-window">
+      <button class="close-btn" aria-label="Close popup">&times;</button>
+      <h2 id="modal-title" class="modal-header"></h2>
+      <p class="modal-description"></p>
+    </div>
+  </div>
+
+  <script>
+    // Data for achievements: name + description - easy to add or remove items here
+    const achievementsData = [
+      {
+        name: "Math Olympiad Winner",
+        description: "Awarded first place in the regional Math Olympiad competition with outstanding problem-solving skills."
+      },
+      {
+        name: "Science Fair Champion",
+        description: "Received top honors for an innovative project on renewable energy sources, impressing judges and peers alike."
+      },
+      {
+        name: "Perfect Attendance",
+        description: "Maintained perfect attendance for the entire academic year, demonstrating discipline and dedication."
+      },
+      {
+        name: "Best Debater",
+        description: "Recognized as the Best Debater in the school's annual inter-class debate tournament."
+      },
+      {
+        name: "Community Service Star",
+        description: "Contributed over 100 hours of volunteer service helping local charities and community events."
+      },
+      {
+        name: "Sports Team Captain",
+        description: "Led the school's basketball team to victory as the team captain with exceptional leadership."
+      },
+      {
+        name: "Art Contest Winner",
+        description: "Won first place in the state art contest with an original and evocative painting."
+      },
+      {
+        name: "Coding Club President",
+        description: "Organized workshops and activities as President of the Coding Club, boosting member engagement."
+      },
+      {
+        name: "Literary Magazine Editor",
+        description: "Edited and curated outstanding literary works as editor of the school’s literary magazine."
+      },
+      {
+        name: "Science Quiz Champion",
+        description: "Won the school wide science quiz with excellent knowledge across multiple disciplines."
+      },
+      {
+        name: "Music Excellence Award",
+        description: "Received an award for outstanding performance and dedication in the school orchestra."
+      },
+      {
+        name: "Environmental Advocate",
+        description: "Promoted eco-friendly practices and led successful campus recycling initiatives."
+      }
+    ];
+
+    const grid = document.querySelector('.button-grid');
+    const modal = document.querySelector('.modal-overlay');
+    const modalTitle = modal.querySelector('.modal-header');
+    const modalDesc = modal.querySelector('.modal-description');
+    const closeBtn = modal.querySelector('.close-btn');
+
+    // Create a button element for each achievement
+    function createAchievementButton(item) {
+      const btn = document.createElement('button');
+      btn.className = 'achievement-btn';
+      btn.type = 'button';
+      btn.textContent = item.name;
+      btn.title = item.name;
+
+      btn.addEventListener('click', () => {
+        openModal(item.name, item.description);
+      });
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openModal(item.name, item.description);
+        }
+      });
+
+      return btn;
+    }
+
+    // Opens the modal popup with the achievement details
+    function openModal(title, description) {
+      modalTitle.textContent = title;
+      modalDesc.textContent = description;
+      modal.classList.add('active');
+      modal.focus();
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Close modal function
+    function closeModal() {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Close modal event listeners
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        closeModal();
+      }
+    });
+
+    // Populate buttons in the grid
+    achievementsData.forEach(item => {
+      const btn = createAchievementButton(item);
+      grid.appendChild(btn);
+    });
+  </script>
+</body>
+</html>
+

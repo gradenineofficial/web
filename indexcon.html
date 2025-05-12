@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Under Construction</title>
+<link rel="icon" href="logo.png">
+<style>
+  :root {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --accent-color: #facc15; /* Vibrant yellow */
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body, html {
+    margin: 0; padding: 0; height: 100%;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-family);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    user-select: none;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--accent-color);
+    margin: 0 0 10px 0;
+    text-shadow: 0 0 15px var(--accent-color);
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.3s ease;
+  }
+  h1:active {
+    transform: scale(0.95);
+  }
+  p.subtitle {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0 0 30px 0;
+    color: #a0a0a0;
+  }
+  .contact-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 40px 0;
+    font-size: 1.2rem;
+    max-width: 320px;
+    width: 100%;
+  }
+  .contact-list li {
+    margin: 12px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--text-color);
+    transition: color 0.3s ease;
+  }
+  .contact-list li:hover {
+    color: var(--accent-color);
+  }
+  .contact-icon {
+    font-size: 1.3rem;
+    display: inline-block;
+    width: 22px;
+    text-align: center;
+    color: var(--accent-color);
+  }
+  #game-container {
+    display: none;
+    background-color: #222222;
+    border: 2px solid var(--accent-color);
+    border-radius: 15px;
+    width: 320px;
+    height: 320px;
+    position: relative;
+    margin: 0 auto 40px auto;
+    box-shadow: 0 0 20px var(--accent-color);
+    user-select: none;
+    overflow: hidden;
+  }
+  #target {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle, var(--accent-color) 60%, transparent 100%);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow:
+      0 0 12px var(--accent-color),
+      inset 0 0 12px #fff9a6;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), filter 0.3s ease;
+  }
+  #target:active {
+    filter: brightness(1.2);
+  }
+  #scoreboard {
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--accent-color);
+    user-select: none;
+    margin: 10px auto 0 auto;
+    width: 320px;
+    text-align: center;
+    text-shadow: 0 0 10px var(--accent-color);
+    min-height: 32px;
+    transition: opacity 0.5s ease;
+  }
+  /* Confetti styles */
+  #confetti-container {
+    pointer-events: none;
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    overflow: visible;
+    z-index: 1000;
+    user-select: none;
+  }
+  .confetti {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: var(--accent-color);
+    opacity: 0.9;
+    border-radius: 2px;
+    will-change: transform, opacity;
+    animation-timing-function: ease-out;
+  }
+  /* Responsive */
+  @media (max-width: 360px) {
+    #game-container, #scoreboard {
+      width: 280px;
+      height: 280px;
+    }
+    #target {
+      width: 40px;
+      height: 40px;
+    }
+  }
+</style>
+</head>
+<body>
+  <h1 id="game-title" tabindex="0" role="button" aria-pressed="false" aria-label="Toggle mini game">Under Construction</h1>
+  <p class="subtitle">We're working hard to bring this page to life. Meanwhile, feel free to contact us!</p>
+  <ul class="contact-list" aria-label="Contact Details">
+    <li><span class="contact-icon" aria-hidden="true">📧</span><a href="mailto:LightningGamez@ehotmail.com" style="color: inherit; text-decoration: none;">LightningGamez</a></li>
+    <li><span class="contact-icon" aria-hidden="true">🌐</span><a href="https:/github.io" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Octocat</a></li>
+  </ul>
+  <div id="game-container" aria-live="polite" aria-label="Mini game area: click the yellow target to score points">
+    <div id="target" tabindex="0" role="button" aria-label="Clickable target. Click to score points."></div>
+  </div>
+  <div id="scoreboard" aria-live="polite" aria-atomic="true" aria-relevant="text">Score: 0</div>
+  <div id="confetti-container"></div>
+<script>
+  (function() {
+    const title = document.getElementById('game-title');
+    const gameContainer = document.getElementById('game-container');
+    const target = document.getElementById('target');
+    const scoreboard = document.getElementById('scoreboard');
+    const confettiContainer = document.getElementById('confetti-container');
+
+    let score = 0;
+    let highScore = 0;
+    let gameActive = false;
+    let moveIntervalId;
+
+    function getRandomPosition(maxWidth, maxHeight, elemWidth, elemHeight) {
+      return {
+        x: Math.random() * (maxWidth - elemWidth),
+        y: Math.random() * (maxHeight - elemHeight)
+      };
+    }
+
+    function moveTarget() {
+      if (!gameActive) return;
+      const containerWidth = gameContainer.clientWidth;
+      const containerHeight = gameContainer.clientHeight;
+      const targetWidth = target.offsetWidth;
+      const targetHeight = target.offsetHeight;
+      const pos = getRandomPosition(containerWidth, containerHeight, targetWidth, targetHeight);
+      target.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+      target.style.transform = `translate(${pos.x}px, ${pos.y}px) scale(1)`;
+    }
+
+    function createConfetti() {
+      const count = 80;
+      for(let i=0; i<count; i++){
+        let confetto = document.createElement('div');
+        confetto.classList.add('confetti');
+        confetto.style.left = (Math.random() * window.innerWidth) + 'px';
+        confetto.style.top = '-10px';
+        confetto.style.backgroundColor = `hsl(${50 + Math.random()*30}, 100%, 50%)`;
+        let size = 4 + Math.random() * 6;
+        confetto.style.width = size + 'px';
+        confetto.style.height = size + 'px';
+        confetto.style.opacity = (Math.random() * 0.8 + 0.2).toFixed(2);
+        confetto.style.transform = `rotate(${Math.random()*360}deg)`;
+        confettiContainer.appendChild(confetto);
+        animateConfetti(confetto);
+      }
+      setTimeout(() => {
+        confettiContainer.innerHTML = '';
+      }, 5000);
+    }
+
+    function animateConfetti(confetto){
+      const duration = 4000 + Math.random() * 2000;
+      const horizontalShift = (Math.random() * 200) - 100;
+      const startLeft = parseFloat(confetto.style.left);
+      let startTime=null;
+
+      function frame(time){
+        if(!startTime) startTime = time;
+        const elapsed = time - startTime;
+        const progress = Math.min(elapsed/duration, 1);
+        confetto.style.top = (progress * window.innerHeight) + 'px';
+        confetto.style.left = (startLeft + horizontalShift * Math.sin(progress*4*Math.PI)) + 'px';
+        if(progress > 0.8){
+          confetto.style.opacity = String(1 - (progress-0.8)/0.2);
+        }
+        if(progress < 1){
+          requestAnimationFrame(frame);
+        }else{
+          confetto.remove();
+        }
+      }
+      requestAnimationFrame(frame);
+    }
+
+    function startGame(){
+      score = 0;
+      scoreboard.textContent = `Score: ${score}`;
+      gameContainer.style.display = 'block';
+      gameActive = true;
+      title.setAttribute('aria-pressed', 'true');
+      moveTarget();
+      moveIntervalId = setInterval(() => {
+        target.style.transform = target.style.transform.replace(/ scale\([\d\.]+\)/, '') + ' scale(0.7)';
+        setTimeout(moveTarget, 200);
+      }, 1800);
+    }
+
+    function endGame(){
+      gameActive = false;
+      clearInterval(moveIntervalId);
+      moveIntervalId = null;
+      gameContainer.style.display = 'none';
+
+      if(score > highScore) highScore = score;
+      scoreboard.textContent = `Game Over! Your high score is: ${highScore}`;
+      createConfetti();
+      title.setAttribute('aria-pressed', 'false');
+    }
+
+    function toggleGame(){
+      if(gameActive) endGame();
+      else startGame();
+    }
+
+    // Clicking on the target increments score & moves it
+    target.addEventListener('click', e => {
+      if(!gameActive) return;
+      e.stopPropagation();
+      score++;
+      scoreboard.textContent = `Score: ${score}`;
+      // pop effect
+      target.style.transition = 'transform 0.15s ease';
+      target.style.transform = target.style.transform.replace(/ scale\([\d\.]+\)/, '') + ' scale(1.2)';
+      setTimeout(() => {
+        if(gameActive){
+          target.style.transform = target.style.transform.replace(/ scale\([\d\.]+\)/, '') + ' scale(1)';
+        }
+      }, 150);
+      moveTarget();
+    });
+
+    // Clicking anywhere else in container ends the game (user dies)
+    gameContainer.addEventListener('click', e => {
+      if(!gameActive) return;
+      if(e.target !== target){
+        endGame();
+      }
+    });
+
+    // Toggle game on heading click or keyboard interaction
+    title.addEventListener('click', toggleGame);
+    title.addEventListener('keydown', e => {
+      if(e.key==='Enter' || e.key===' '){
+        e.preventDefault();
+        toggleGame();
+      }
+    });
+  })();
+</script>
+</body>
+</html>

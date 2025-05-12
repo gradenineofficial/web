@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Video Gallery</title>
+<link rel="icon" href="logo.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+  :root {
+    --blue: #4a90e2;
+    --dark-bg: #121212;
+    --dark-bg-alt: #1e1e1e;
+    --dark-gray: #272727;
+    --text-light: #e0e0e0;
+    --shadow-blue: rgba(74, 144, 226, 0.6);
+    --glow-blue: rgba(74, 144, 226, 0.8);
+  }
+
+  /* Reset & base styles */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    background-color: var(--dark-bg);
+    color: var(--text-light);
+    font-family: 'Montserrat', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+    padding: 2rem 0 4rem;
+  }
+
+  h1 {
+    margin: 0 0 2rem;
+    font-weight: 700;
+    font-size: 2.75rem;
+    letter-spacing: 0.12em;
+    color: var(--blue);
+    user-select: none;
+    text-shadow:
+      0 0 6px var(--glow-blue),
+      0 0 12px var(--glow-blue),
+      0 0 18px var(--glow-blue);
+    text-align: center;
+  }
+
+  /* Spotlight Video Section */
+  .spotlight-section {
+    max-width: 900px;
+    width: 100%;
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+
+  .spotlight-title {
+    font-weight: 700;
+    font-size: 1.8rem;
+    margin-bottom: 0.6rem;
+    color: var(--blue);
+    user-select: none;
+  }
+
+  .spotlight-video-container {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 */
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow:
+      0 0 40px var(--blue),
+      0 0 60px var(--shadow-blue);
+    animation: fadeInPop 1s ease forwards;
+  }
+
+  .spotlight-video-container video {
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    object-fit: cover;
+    user-select: none;
+    background-color: black;
+  }
+
+  .spotlight-quote {
+    margin-top: 1rem;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--blue);
+    user-select: none;
+    text-shadow:
+      0 0 4px var(--glow-blue);
+  }
+
+  @keyframes fadeInPop {
+    0% {
+      opacity: 0;
+      transform: scale(0.9);
+      filter: brightness(0.8) saturate(0.7);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+      filter: brightness(1) saturate(1);
+    }
+  }
+
+  /* Gallery Wrapper - centers gallery horizontally */
+  .gallery-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  /* Video gallery flex container - videos side by side, wrapping */
+  .gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 1.8rem;
+    max-width: 1200px;
+    user-select: none;
+  }
+
+  /* Video Preview Items */
+  .gallery-item {
+    flex: 1 1 220px; /* flexible base width */
+    max-width: 260px;
+    height: 150px;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 2.5px solid var(--blue);
+    box-shadow:
+      0 4px 10px var(--shadow-blue),
+      0 0 6px var(--blue);
+    background-color: var(--dark-bg-alt);
+    transition:
+      transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.4s ease,
+      filter 0.4s ease;
+    position: relative;
+    will-change: transform, box-shadow, filter;
+  }
+
+  @keyframes flickerGlow {
+    0%, 100% {
+      box-shadow:
+        0 4px 10px var(--shadow-blue),
+        0 0 6px var(--blue);
+    }
+    50% {
+      box-shadow:
+        0 6px 18px var(--shadow-blue),
+        0 0 12px var(--glow-blue);
+    }
+  }
+
+  .gallery-item:hover,
+  .gallery-item:focus-visible {
+    animation: flickerGlow 1.5s infinite alternate;
+    transform: scale(1.07);
+    box-shadow:
+      0 10px 30px var(--shadow-blue),
+      0 0 15px var(--glow-blue);
+    outline: none;
+    filter: brightness(1.1);
+    z-index: 5;
+  }
+
+  /* Preview video styling */
+  .gallery-item video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    user-select: none;
+    filter: brightness(0.9);
+    transition: filter 0.4s ease;
+    border-radius: 12px;
+  }
+  .gallery-item:hover video {
+    filter: brightness(1);
+  }
+
+  /* Lightbox Overlay */
+  .lightbox-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(18, 18, 18, 0.96);
+    backdrop-filter: brightness(0.75) saturate(1.3) contrast(1.25);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1100;
+    padding: 1rem;
+  }
+  .lightbox-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Lightbox Video Container */
+  .lightbox-video-container {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 16px;
+    box-shadow:
+      0 0 45px var(--blue),
+      0 0 60px var(--blue);
+    overflow: hidden;
+    animation: lightroomPop 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @keyframes lightroomPop {
+    0% {
+      filter: brightness(0.45) saturate(0.5) blur(10px);
+      transform: scale(0.68);
+      opacity: 0;
+    }
+    100% {
+      filter: brightness(1) saturate(1) blur(0);
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .lightbox-video-container video {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    display: block;
+    border-radius: 16px;
+    user-select: none;
+    pointer-events: auto;
+    outline: none;
+  }
+
+  /* Close Button */
+  .close-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: var(--blue);
+    border: none;
+    color: var(--dark-bg);
+    font-size: 2rem;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    box-shadow:
+      0 0 15px var(--blue),
+      0 0 30px var(--blue);
+    transition:
+      background-color 0.3s ease,
+      transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+  }
+  .close-btn:hover,
+  .close-btn:focus {
+    background-color: #2e72d2;
+    transform: rotate(90deg) scale(1.1);
+    box-shadow:
+      0 0 24px var(--glow-blue),
+      0 0 40px var(--glow-blue);
+    outline: none;
+  }
+
+  /* Prevent background scrolling when overlay is open */
+  body.lightbox-open {
+    overflow: hidden;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--dark-bg);
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--blue);
+    border-radius: 12px;
+    border: 2px solid var(--dark-bg);
+  }
+</style>
+</head>
+<body>
+  <h1>Video Gallery</h1>
+
+  <section class="spotlight-section" aria-label="Spotlight video section">
+    <h2 class="spotlight-title">Spotlight Video</h2>
+    <div class="spotlight-video-container">
+      <!-- Use your MP4 video URL in the `src` attribute below -->
+      <video
+        src="linux.mp4"
+        controls
+        preload="metadata"
+        aria-describedby="spotlight-quote"
+      ></video>
+    </div>
+    <blockquote id="spotlight-quote" class="spotlight-quote">
+      "Linux Was Always The Best Operating System" -Linus Torvalds 
+    </blockquote>
+  </section>
+
+  <div class="gallery-wrapper">
+    <!--
+      Video gallery videos container.
+      To add or remove videos, add/remove <div class="gallery-item"> blocks here,
+      each containing a <video> element with your MP4 video source.
+    -->
+    <div class="gallery" role="list" aria-label="Video gallery">
+      <div class="gallery-item" role="listitem" tabindex="0" aria-label="Open video 1">
+        <video
+          src="linux.mp4"
+          muted
+          preload="metadata"
+          loop
+          playsinline
+          aria-label="Sample 5-second video"
+        ></video>
+      </div>
+
+      <div class="gallery-item" role="listitem" tabindex="0" aria-label="Open video 2">
+        <video
+          src="linux.mp4"
+          muted
+          preload="metadata"
+          loop
+          playsinline
+          aria-label="Sample 10-second video"
+        ></video>
+      </div>
+
+      <div class="gallery-item" role="listitem" tabindex="0" aria-label="Open video 3">
+        <video
+          src="linux.mp4"
+          muted
+          preload="metadata"
+          loop
+          playsinline
+          aria-label="Sample 15-second video"
+        ></video>
+      </div>
+
+      <div class="gallery-item" role="listitem" tabindex="0" aria-label="Open video 4">
+        <video
+          src="linux.mp4"
+          muted
+          preload="metadata"
+          loop
+          playsinline
+          aria-label="Sample 3-second video"
+        ></video>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox Overlay -->
+  <div class="lightbox-overlay" aria-hidden="true" role="dialog" aria-label="Video preview">
+    <div class="lightbox-video-container" tabindex="0">
+      <button class="close-btn" aria-label="Close video overlay" title="Close overlay">&times;</button>
+      <video controls autoplay></video>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const gallery = document.querySelector('.gallery');
+      const overlay = document.querySelector('.lightbox-overlay');
+      const overlayVideoContainer = overlay.querySelector('.lightbox-video-container');
+      const overlayVideo = overlay.querySelector('video');
+      const closeBtn = overlay.querySelector('.close-btn');
+
+      function openLightbox(videoSrc, ariaLabel) {
+        overlayVideo.src = videoSrc;
+        overlayVideo.setAttribute('aria-label', ariaLabel || 'Video playback');
+        overlay.classList.add('visible');
+        document.body.classList.add('lightbox-open');
+        overlay.setAttribute('aria-hidden', 'false');
+        overlayVideo.focus();
+      }
+
+      function closeLightbox() {
+        overlay.classList.remove('visible');
+        document.body.classList.remove('lightbox-open');
+        overlay.setAttribute('aria-hidden', 'true');
+        overlayVideo.pause();
+        overlayVideo.src = '';
+      }
+
+      gallery.addEventListener('click', e => {
+        const target = e.target.closest('.gallery-item video');
+        if (!target) return;
+
+        openLightbox(target.currentSrc || target.src, target.getAttribute('aria-label'));
+      });
+
+      gallery.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          const target = e.target.closest('.gallery-item');
+          if (!target) return;
+          const video = target.querySelector('video');
+          openLightbox(video.currentSrc || video.src, video.getAttribute('aria-label'));
+          e.preventDefault();
+        }
+      });
+
+      closeBtn.addEventListener('click', closeLightbox);
+
+      overlay.addEventListener('click', e => {
+        if (e.target === overlay) {
+          closeLightbox();
+        }
+      });
+
+      window.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && overlay.classList.contains('visible')) {
+          closeLightbox();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

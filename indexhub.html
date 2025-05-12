@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Grade 9 Selector</title>
+<link rel="icon" href="logo.png">
+<style>
+  :root {
+    --button-size: 120px;
+    --button-gap: 20px;
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --button-bg-color: #1e293b;
+    --button-hover-bg: #273c75;
+    --button-border: 2px solid #3b82f6; /* Blue accent */
+    --button-border-hover: 2px solid #60a5fa; /* Lighter blue accent */
+    --label-color: #60a5fa;
+    --shadow-color: #3b82f6;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px 10px 40px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  h1 {
+    font-weight: 700;
+    color: var(--button-border);
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 2.2rem;
+    user-select: none;
+    text-shadow: 0 0 8px var(--button-border);
+  }
+  .buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(5, var(--button-size));
+    grid-gap: var(--button-gap);
+    justify-content: center;
+    width: 100%;
+    max-width: calc((var(--button-size) * 5) + (var(--button-gap) * 4));
+  }
+  .button-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  a.image-button {
+    all: unset;
+    width: var(--button-size);
+    height: var(--button-size);
+    background-color: var(--button-bg-color);
+    border: var(--button-border);
+    border-radius: 15px;
+    cursor: pointer;
+    padding: 0;
+    box-shadow: 0 3px 6px rgba(59,130,246,0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition:
+      background-color 0.35s cubic-bezier(0.4,0,0.2,1),
+      border-color 0.35s cubic-bezier(0.4,0,0.2,1),
+      box-shadow 0.45s cubic-bezier(0.4,0,0.2,1),
+      transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    user-select: none;
+    will-change: transform, box-shadow;
+    /* subtle 3D-ish effect */
+    perspective: 600px;
+  }
+  a.image-button img {
+    max-width: 70%;
+    max-height: 70%;
+    object-fit: contain;
+    user-select: none;
+    pointer-events: none;
+    filter: drop-shadow(0 0 2px var(--shadow-color));
+  }
+  a.image-button:hover,
+  a.image-button:focus {
+    background-color: var(--button-hover-bg);
+    border-color: var(--button-border-hover);
+    box-shadow:
+      0 0 20px 4px var(--shadow-color),
+      0 0 30px 6px var(--shadow-color);
+    outline: none;
+    transform: scale(1.1) rotateX(8deg);
+  }
+  a.image-button:active {
+    transform: scale(0.95) rotateX(0deg);
+    box-shadow: 0 3px 6px rgba(59,130,246,0.5);
+  }
+  .button-label {
+    margin-top: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--label-color);
+    user-select: none;
+    text-align: center;
+    text-shadow: 0 0 6px var(--label-color);
+  }
+  /* Responsive adjustments */
+  @media (max-width: 720px) {
+    .buttons-grid {
+      grid-template-columns: repeat(4, var(--button-size));
+      max-width: calc((var(--button-size) * 4) + (var(--button-gap) * 3));
+    }
+  }
+  @media (max-width: 570px) {
+    .buttons-grid {
+      grid-template-columns: repeat(3, var(--button-size));
+      max-width: calc((var(--button-size) * 3) + (var(--button-gap) * 2));
+    }
+  }
+  @media (max-width: 430px) {
+    .buttons-grid {
+      grid-template-columns: repeat(2, var(--button-size));
+      max-width: calc((var(--button-size) * 2) + var(--button-gap));
+    }
+  }
+  @media (max-width: 300px) {
+    :root {
+      --button-size: 100px;
+      --button-gap: 15px;
+    }
+  }
+</style>
+</head>
+<body>
+  <h1>Grade 9 Association Hub</h1>
+  <div class="buttons-grid" role="list">
+    <div class="button-wrapper" role="listitem">
+      <a href="indexabt.html" class="image-button" aria-label="Button 1">
+        <img src="https://pngimg.com/d/award_PNG64.png" alt="Image for Button 1" />
+      </a>
+      <div class="button-label">About</div>
+    </div>
+    <div class="button-wrapper" role="listitem">
+      <a href="indexgal.html" class="image-button" aria-label="Button 2">
+        <img src="https://icons.iconarchive.com/icons/praveen/minimal-outline/512/gallery-icon.png" alt="Image for Button 2" />
+      </a>
+      <div class="button-label">Photos</div>
+    </div>
+    <div class="button-wrapper" role="listitem">
+      <a href="indexvid.html" class="image-button" aria-label="Button 3">
+        <img src="https://www.pngplay.com/wp-content/uploads/8/Video-Player-Logo-Transparent-PNG.png" alt="Image for Button 3" />
+      </a>
+      <div class="button-label">Videos</div>
+    </div>
+    <div class="button-wrapper" role="listitem">
+      <a href="indexmeet.html" class="image-button" aria-label="Button 4">
+        <img src="https://i.pinimg.com/originals/03/b6/72/03b6726287dff5375e4035de4c17f03f.png" alt="Image for Button 4" />
+      </a>
+      <div class="button-label">Meeting</div>
+    </div>
+    <div class="button-wrapper" role="listitem">
+      <a href="indexboard.html" class="image-button" aria-label="Button 5">
+        <img src="https://static.thenounproject.com/png/173081-200.png" alt="Image for Button 5" />
+      </a>
+      <div class="button-label">Whiteboard</div>
+    </div>
+    <div class="button-wrapper" role="listitem">
+      <a href="indexcal.html" class="image-button" aria-label="Button 6">
+        <img src="https://www.freeiconspng.com/uploads/calendar-icon-png--0.png" alt="Image for Button 6" />
+      </a>
+      <div class="button-label">Calender</div>
+    </div>
+    <div class="button-wrapper" role="listitem">
+      <a href="indexcon.html" class="image-button" aria-label="Button 7">
+        <img src="https://cdn-icons-png.flaticon.com/512/61/61582.png" alt="Image for Button 7" />
+      </a>
+      <div class="button-label">Chat</div>
+    </div>
+    <div class="button-wrapper" role="listitem">
+      <a href="indexach.html" class="image-button" aria-label="Button 8">
+        <img src="https://cdn0.iconfinder.com/data/icons/awards-icostory-black-and-white/64/podium-pedestal-award-winner-2-1024.png" alt="Image for Button 8" />
+      </a>
+      <div class="button-label">Achievements</div>
+    </div>
+    <div class="button-wrapper" role="listitem">
+      <a href="indexcon.html" class="image-button" aria-label="Button 9">
+        <img src="https://static.thenounproject.com/png/302763-200.png" alt="Image for Button 9" />
+      </a>
+      <div class="button-label">Reserve</div>
+    </div>
+    <div class="button-wrapper" role="listitem">
+      <a href="indexcred.html" class="image-button" aria-label="Button 10">
+        <img src="https://iconape.com/wp-content/png_logo_vector/credits.png" alt="Image for Button 10" />
+      </a>
+      <div class="button-label">Credits</div>
+    </div>
+  </div>
+</body>
+</html>

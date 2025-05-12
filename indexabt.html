@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>About</title>
+<link rel="icon" href="logo.png">
+<style>
+  /* Reset and base */
+  @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@600&display=swap');
+  * {
+    box-sizing: border-box;
+  }
+  html, body {
+    margin: 0; padding: 0;
+    height: 100vh;
+    background: #0a122a;
+    color: #aad4ff;
+    font-family: 'Exo 2', sans-serif;
+    overflow-x: hidden;
+    overflow-y: hidden; /* prevent vertical scroll */
+  }
+
+  /* Page container with blue accent border */
+  .page-container {
+    max-width: 1400px;
+    margin: 12px auto 12px auto;
+    padding: 15px 18px 18px 18px;
+    border: 6px solid #1e3eff;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #0a122a 0%, #141e4a 100%);
+    box-shadow:
+      0 0 30px #1e3effaa,
+      inset 0 0 30px #1e3eff66;
+    position: relative;
+    z-index: 1;
+    /* Make container height fill viewport minus margins */
+    height: calc(100vh - 24px);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header region */
+  header {
+    text-align: center;
+    margin-bottom: 12px;
+    position: relative;
+    flex-shrink: 0;
+  }
+  header h1 {
+    font-size: 2.4rem;
+    letter-spacing: 3px;
+    color: #53aaff;
+    text-shadow:
+      0 0 10px #53aaff,
+      0 0 20px #53aaff;
+    animation: headerGlow 3s ease-in-out infinite alternate;
+    margin: 0;
+    padding: 0;
+    line-height: 1.1;
+  }
+  @keyframes headerGlow {
+    0% {
+      text-shadow:
+        0 0 10px #53aaff,
+        0 0 20px #53aaff;
+    }
+    50% {
+      text-shadow:
+        0 0 30px #82b7ff,
+        0 0 50px #82b7ff,
+        0 0 70px #82b7ff;
+    }
+    100% {
+      text-shadow:
+        0 0 10px #53aaff,
+        0 0 20px #53aaff;
+    }
+  }
+
+  /* Grid container for buttons */
+  .button-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 12px 18px;
+    flex-grow: 1;
+    /* Ensure grid scroll not allowed */
+    overflow: hidden;
+    padding-bottom: 4px;
+  }
+
+  /* Buttons */
+  .btn-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    perspective: 800px;
+    transition: transform 0.3s ease;
+  }
+  .btn-wrapper:focus-within .btn-square,
+  .btn-wrapper:hover .btn-square {
+    transform: rotateX(15deg) translateY(-4px);
+    box-shadow:
+      0 6px 15px #1e3effcc,
+      0 0 30px #1e3eff88;
+  }
+  .btn-wrapper:active .btn-square {
+    transform: rotateX(-10deg) translateY(2px) scale(0.95);
+    box-shadow: 0 0 20px #4f94ffcc inset;
+  }
+
+  /* Square button */
+  .btn-square {
+    width: 95px;
+    height: 95px;
+    border: 3px solid #1e3eff;
+    border-radius: 12px;
+    background: #0549e5;
+    background-image: linear-gradient(135deg, #0a56fe, #115ace);
+    box-shadow:
+      inset 0 0 8px #428aff,
+      0 0 8px #1e3eff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition:
+      background-color 0.4s ease,
+      box-shadow 0.4s ease,
+      transform 0.25s ease;
+    position: relative;
+  }
+  .btn-square::before {
+    content: "";
+    position: absolute;
+    top: -4px; bottom: -4px; left: -4px; right: -4px;
+    border: 2px solid #58a6ff;
+    border-radius: 14px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .btn-wrapper:hover .btn-square::before {
+    opacity: 1;
+    animation: pulseBorder 2.5s infinite ease-in-out;
+  }
+  @keyframes pulseBorder {
+    0% {
+      box-shadow: 0 0 4px #82b7ff;
+      opacity: 0.7;
+    }
+    50% {
+      box-shadow: 0 0 16px #a4c8ff;
+      opacity: 1;
+    }
+    100% {
+      box-shadow: 0 0 4px #82b7ff;
+      opacity: 0.7;
+    }
+  }
+
+  /* Button image */
+  .btn-img {
+    width: 52px;
+    height: 52px;
+    filter: drop-shadow(0 0 4px #1e3effaa);
+    transition: filter 0.4s ease;
+    z-index: 1;
+  }
+  .btn-wrapper:hover .btn-img {
+    filter: drop-shadow(0 0 12px #61a0ffcc);
+  }
+
+  /* Button name text */
+  .btn-name {
+    margin-top: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #76aaff;
+    text-shadow:
+      0 0 4px #2a5be5;
+    transition: color 0.3s ease;
+    user-select: none;
+    text-align: center;
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .btn-wrapper:hover .btn-name {
+    color: #a3c0ff;
+    text-shadow:
+      0 0 8px #2a5be5;
+  }
+
+  /* Modal popup container */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(10, 18, 42, 0.85);
+    backdrop-filter: blur(12px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .modal-window {
+    background: #122154;
+    border: 3px solid #2b54ff;
+    border-radius: 16px;
+    box-shadow:
+      0 0 40px #1e3effaa,
+      inset 0 0 15px #1e3effcc;
+    width: 420px;
+    max-width: 90vw;
+    padding: 26px 32px;
+    color: #c8d7ff;
+    text-align: center;
+    transform: scale(0.6);
+    opacity: 0;
+    transition:
+      transform 0.35s cubic-bezier(0.2,1,0.3,1),
+      opacity 0.35s ease;
+    animation: popUp 0.4s forwards;
+    position: relative;
+  }
+  .modal-overlay.active .modal-window {
+    opacity: 1;
+    transform: scale(1);
+  }
+  @keyframes popUp {
+    0% {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+    70% {
+      transform: scale(1.1);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Modal header */
+  .modal-header {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: #3fa5ff;
+    text-shadow: 0 0 12px #61a0ff;
+  }
+
+  /* Modal description text */
+  .modal-description {
+    font-size: 1rem;
+    line-height: 1.4;
+    color: #aabfffcc;
+  }
+
+  /* Close button */
+  .close-btn {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: transparent;
+    border: 2px solid #3a79ff;
+    border-radius: 8px;
+    color: #7faaff;
+    font-size: 1.5rem;
+    line-height: 1;
+    padding: 4px 12px;
+    font-weight: 900;
+    cursor: pointer;
+    filter: drop-shadow(0 0 3px #3a79ffaa);
+    transition:
+      color 0.3s ease,
+      border-color 0.3s ease,
+      transform 0.2s ease;
+  }
+  .close-btn:hover {
+    color: #a8c2ff;
+    border-color: #7ea6ff;
+    transform: scale(1.1);
+  }
+
+  /* Background subtle moving animation for page container */
+  .page-container::before {
+    content: "";
+    position: absolute;
+    top: -200px; left: -200px; right: -200px; bottom: -200px;
+    background:
+      radial-gradient(circle at center, rgba(30, 62, 255, 0.25) 0%, transparent 70%),
+      radial-gradient(circle at center right, rgba(60, 110, 255, 0.15) 0%, transparent 70%);
+    z-index: 0;
+    animation: backgroundShift 15s linear infinite alternate;
+    border-radius: 16px;
+    pointer-events: none;
+  }
+  @keyframes backgroundShift {
+    0% {
+      background-position: center center, right center;
+    }
+    100% {
+      background-position: top left, left center;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="page-container">
+    <header>
+      <h1>About Everyone</h1>
+    </header>
+    <main>
+      <div class="button-grid" role="list" aria-label="Gallery of blue buttons">
+        <!-- Buttons inserted here by JS -->
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal popup -->
+  <div class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
+    <div class="modal-window">
+      <button class="close-btn" aria-label="Close popup">&times;</button>
+      <h2 id="modal-title" class="modal-header"></h2>
+      <p class="modal-description"></p>
+    </div>
+  </div>
+
+<script>
+  // Data for 20 buttons: name, image URL, description
+  const buttonData = [
+    {name: 'Aurora', img: 'https://cdn-icons-png.flaticon.com/512/511/511946.png', description: 'Aurora means dawn, a natural light display in the Earth\'s sky.'},
+    {name: 'Nimbus', img: 'https://cdn-icons-png.flaticon.com/512/414/414825.png', description: 'Nimbus clouds are rain-bearing clouds, bringing life-giving water.'},
+    {name: 'Zephyr', img: 'https://cdn-icons-png.flaticon.com/512/414/414927.png', description: 'Zephyr is a gentle, mild breeze from the west.'},
+    {name: 'Stellar', img: 'https://cdn-icons-png.flaticon.com/512/616/616489.png', description: 'Stellar relates to stars and celestial bodies.'},
+    {name: 'Cascade', img: 'https://cdn-icons-png.flaticon.com/512/414/414927.png', description: 'Cascade means a waterfall or series of small waterfalls.'},
+    {name: 'Halo', img: 'https://cdn-icons-png.flaticon.com/512/747/747311.png', description: 'Halo is a ring of light appearing to surround a luminous body.'},
+    {name: 'Orbit', img: 'https://cdn-icons-png.flaticon.com/512/616/616408.png', description: 'Orbit is the curved path of an object around a star or planet.'},
+    {name: 'Vortex', img: 'https://cdn-icons-png.flaticon.com/512/2907/2907253.png', description: 'Vortex is a mass of spinning fluid or air.'},
+    {name: 'Quantum', img: 'https://cdn-icons-png.flaticon.com/512/414/414927.png', description: 'Quantum relates to the smallest particles and energy quanta.'},
+    {name: 'Nebula', img: 'https://cdn-icons-png.flaticon.com/512/616/616408.png', description: 'Nebula is a cloud of gas and dust in outer space.'},
+    {name: 'Photon', img: 'https://cdn-icons-png.flaticon.com/512/414/414927.png', description: 'Photon is a particle representing a quantum of light.'},
+    {name: 'Celeste', img: 'https://cdn-icons-png.flaticon.com/512/747/747314.png', description: 'Celeste means heavenly or celestial.'},
+    {name: 'Glacier', img: 'https://cdn-icons-png.flaticon.com/512/414/414825.png', description: 'Glacier is a slow-moving mass of ice.'},
+    {name: 'Comet', img: 'https://cdn-icons-png.flaticon.com/512/1684/1684728.png', description: 'Comet is an icy small Solar System body with a tail.'},
+    {name: 'Meteor', img: 'https://cdn-icons-png.flaticon.com/512/616/616404.png', description: 'Meteor is the flash of light when a meteoroid enters atmosphere.'},
+    {name: 'Solar', img: 'https://cdn-icons-png.flaticon.com/512/747/747322.png', description: 'Solar relates to the sun.'},
+    {name: 'Lunar', img: 'https://cdn-icons-png.flaticon.com/512/747/747314.png', description: 'Lunar relates to the moon.'},
+    {name: 'Orbitron', img: 'https://cdn-icons-png.flaticon.com/512/616/616419.png', description: 'Orbitron is a futuristic orbital machine concept.'},
+    {name: 'Nova', img: 'https://cdn-icons-png.flaticon.com/512/616/616408.png', description: 'Nova is a star showing sudden increase in brightness.'},
+    {name: 'Polaris', img: 'https://cdn-icons-png.flaticon.com/512/616/616489.png', description: 'Polaris is the North Star, a guiding star in navigation.'},
+    {name: 'Polaris', img: 'https://cdn-icons-png.flaticon.com/512/616/616489.png', description: 'Polaris is the North Star, a guiding star in navigation.'}
+  ];
+
+  const grid = document.querySelector('.button-grid');
+  const modalOverlay = document.querySelector('.modal-overlay');
+  const modalTitle = modalOverlay.querySelector('.modal-header');
+  const modalDescription = modalOverlay.querySelector('.modal-description');
+  const closeBtn = modalOverlay.querySelector('.close-btn');
+
+  // Create buttons dynamically
+  function createButton(item, index) {
+    const btnWrapper = document.createElement('div');
+    btnWrapper.className = 'btn-wrapper';
+    btnWrapper.tabIndex = 0;
+    btnWrapper.setAttribute('role', 'listitem');
+    btnWrapper.setAttribute('aria-label', item.name + ', button');
+
+    const btnSquare = document.createElement('div');
+    btnSquare.className = 'btn-square';
+
+    const img = document.createElement('img');
+    img.className = 'btn-img';
+    img.src = item.img;
+    img.alt = item.name + " icon";
+
+    btnSquare.appendChild(img);
+    btnWrapper.appendChild(btnSquare);
+
+    const btnName = document.createElement('div');
+    btnName.className = 'btn-name';
+    btnName.textContent = item.name;
+    btnWrapper.appendChild(btnName);
+
+    // On click open modal with description
+    btnWrapper.addEventListener('click', () => {
+      openModal(item.name, item.description);
+    });
+    // On keyboard Enter or Space open modal
+    btnWrapper.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openModal(item.name, item.description);
+      }
+    });
+
+    return btnWrapper;
+  }
+
+  // Open modal function
+  function openModal(title, description) {
+    modalTitle.textContent = title;
+    modalDescription.textContent = description;
+    modalOverlay.classList.add('active');
+    modalOverlay.focus();
+    document.body.style.overflow = 'hidden';
+  }
+
+  // Close modal function
+  function closeModal() {
+    modalOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  // Close modal via close button click
+  closeBtn.addEventListener('click', closeModal);
+
+  // Close modal with Escape key
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+      closeModal();
+    }
+  });
+
+  // Close modal on click outside modal-window
+  modalOverlay.addEventListener('click', (e) => {
+    if(e.target === modalOverlay) {
+      closeModal();
+    }
+  });
+
+  // Populate grid
+  buttonData.forEach((item, i) => {
+    const btn = createButton(item, i);
+    grid.appendChild(btn);
+  });
+</script>
+</body>
+</html>

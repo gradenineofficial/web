@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Credits</title>
+<link rel="icon" href="logo.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@600&display=swap');
+  * {
+    box-sizing: border-box;
+  }
+  html, body {
+    margin: 0; padding: 0;
+    height: 100vh;
+    background: #0a122a;
+    color: #aad4ff;
+    font-family: 'Exo 2', sans-serif;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Scrollbar style */
+  body::-webkit-scrollbar {
+    width: 8px;
+  }
+  body::-webkit-scrollbar-track {
+    background: #0a122a;
+  }
+  body::-webkit-scrollbar-thumb {
+    background: #1e3eff;
+    border-radius: 4px;
+  }
+
+  /* Container styling */
+  .page-container {
+    max-width: 900px;
+    margin: 40px auto 50px auto;
+    padding: 30px 28px 40px 28px;
+    border: 6px solid #1e3eff;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #0a122a 0%, #141e4a 100%);
+    box-shadow:
+      0 0 40px #1e3effbb,
+      inset 0 0 40px #1e3eff88;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Heading */
+  header {
+    user-select: none;
+    margin-bottom: 42px;
+    text-align: center;
+  }
+  header h1 {
+    font-size: 3.5rem;
+    letter-spacing: 4px;
+    color: #53aaff;
+    text-shadow:
+      0 0 12px #53aaff,
+      0 0 30px #53aaff;
+    animation: headerGlow 3.5s ease-in-out infinite alternate;
+    margin: 0;
+  }
+  @keyframes headerGlow {
+    0% {
+      text-shadow:
+        0 0 12px #53aaff,
+        0 0 30px #53aaff;
+    }
+    50% {
+      text-shadow:
+        0 0 40px #82b7ff,
+        0 0 70px #82b7ff,
+        0 0 100px #82b7ff;
+    }
+    100% {
+      text-shadow:
+        0 0 12px #53aaff,
+        0 0 30px #53aaff;
+    }
+  }
+
+  /* Play button */
+  .play-btn {
+    width: 240px;
+    height: 68px;
+    background: linear-gradient(135deg, #053dbf, #0a56fe);
+    border: 3.5px solid #1e3eff;
+    border-radius: 18px;
+    color: #cce3ff;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: 1.3px;
+    text-align: center;
+    line-height: 1.25;
+    cursor: pointer;
+    user-select: none;
+    box-shadow:
+      inset 0 0 14px #1e3effcc,
+      0 0 18px #2c5cffbb;
+    transition:
+      background 0.35s ease,
+      box-shadow 0.35s ease,
+      transform 0.3s cubic-bezier(0.2,1,0.3,1),
+      color 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 16px;
+  }
+  .play-btn:hover,
+  .play-btn:focus-visible {
+    background: linear-gradient(135deg, #1a57ff, #3279ff);
+    box-shadow:
+      inset 0 0 20px #1e3effff,
+      0 0 32px #507affee;
+    color: #d5e4ff;
+    outline: none;
+    transform: translateY(-6px) scale(1.1);
+    text-shadow:
+      0 0 8px #a3c0ff;
+  }
+  .play-btn:active {
+    transform: translateY(2px) scale(0.95);
+    box-shadow:
+      inset 0 0 25px #1e3effdd,
+      0 0 20px #2c5cffcc;
+  }
+
+  /* Accessible focus ring */
+  .play-btn:focus-visible {
+    outline: 3px solid #3580ff;
+    outline-offset: 3px;
+  }
+
+  /* Modal popup container */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(10, 18, 42, 0.95);
+    backdrop-filter: blur(15px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .modal-window {
+    background: #111e4c;
+    border: 4px solid #3c68ff;
+    border-radius: 20px;
+    box-shadow:
+      0 0 55px #3379ffbb,
+      inset 0 0 25px #3c7affcc;
+    max-width: 540px;
+    width: 95vw;
+    padding: 30px 36px 26px 36px;
+    color: #d1e4ff;
+    text-align: center;
+    transform: scale(0.65);
+    opacity: 0;
+    transition:
+      transform 0.38s cubic-bezier(0.2,1,0.3,1),
+      opacity 0.38s ease;
+    animation: popUp 0.48s forwards;
+    position: relative;
+    user-select: none;
+  }
+  .modal-overlay.active .modal-window {
+    opacity: 1;
+    transform: scale(1);
+  }
+  @keyframes popUp {
+    0% {
+      opacity: 0;
+      transform: scale(0.65);
+    }
+    70% {
+      transform: scale(1.1);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Modal header */
+  .modal-header {
+    font-size: 2rem;
+    font-weight: 900;
+    margin-bottom: 20px;
+    color: #78aaff;
+    text-shadow: 0 0 18px #78aaffbb;
+    user-select: none;
+  }
+
+  /* Close button */
+  .close-btn {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    background: transparent;
+    border: 2.5px solid #4a7dff;
+    border-radius: 10px;
+    color: #8dafff;
+    font-size: 1.8rem;
+    line-height: 1;
+    padding: 4px 14px;
+    font-weight: 900;
+    cursor: pointer;
+    filter: drop-shadow(0 0 4px #3a7fffaa);
+    transition:
+      color 0.3s ease,
+      border-color 0.3s ease,
+      transform 0.2s ease;
+  }
+  .close-btn:hover {
+    color: #c0d2ff;
+    border-color: #7fc3ff;
+    transform: scale(1.2);
+  }
+
+  /* Game container */
+  #game-container {
+    width: 480px;
+    max-width: 100%;
+    height: 320px;
+    background: #02103f;
+    border-radius: 16px;
+    position: relative;
+    margin: 0 auto;
+    box-shadow:
+      inset 0 0 30px #2a52ffcc,
+      0 0 40px #337affbb;
+    user-select: none;
+  }
+
+  /* Canvas styling */
+  #game-canvas {
+    display: block;
+    background: #011038;
+    border-radius: 16px;
+    box-shadow: inset 0 0 20px #0f3dff99;
+    margin: auto;
+  }
+
+  /* Game HUD */
+  #game-hud {
+    margin-top: 14px;
+    font-size: 1.15rem;
+    color: #82aaffcc;
+    font-weight: 600;
+    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 18px;
+  }
+  #game-hud span {
+    filter: drop-shadow(0 0 3px #365dffbb);
+  }
+
+  /* Start and restart button */
+  #start-btn {
+    margin: 20px auto 0 auto;
+    display: block;
+    width: 160px;
+    height: 50px;
+    background: linear-gradient(135deg, #0a54f9, #3572ff);
+    border-radius: 14px;
+    border: 3px solid #1e3eff;
+    color: #ddeaff;
+    font-weight: 800;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow:
+      inset 0 0 12px #1e3effcc,
+      0 0 20px #4270ffbb;
+    transition: 
+      background 0.3s ease,
+      box-shadow 0.3s ease,
+      transform 0.3s ease;
+  }
+  #start-btn:hover, #start-btn:focus-visible {
+    background: linear-gradient(135deg, #1a60ff, #4a87ff);
+    outline: none;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow:
+      inset 0 0 18px #1e3effff,
+      0 0 30px #5c89ffdd;
+  }
+  #start-btn:active {
+    transform: translateY(1px) scale(0.95);
+    box-shadow:
+      inset 0 0 25px #1e3effee,
+      0 0 22px #3c6affbb;
+  }
+  #start-btn:focus-visible {
+    outline: 3px solid #3791ff;
+    outline-offset: 3px;
+  }
+
+</style>
+</head>
+<body>
+  <div class="page-container" role="main">
+    <header>
+      <h1>Credits</h1>
+    </header>
+    <button class="play-btn" id="open-game-btn" aria-haspopup="dialog" aria-controls="game-modal" aria-label="Open game popup">Not Disclosed</button>
+  </div>
+
+  <!-- Modal popup -->
+  <div class="modal-overlay" id="game-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
+    <div class="modal-window">
+      <button class="close-btn" aria-label="Close game popup" id="close-game-btn">&times;</button>
+      <h2 id="modal-title" class="modal-header">Dodge the Blocks</h2>
+      <div id="game-container" aria-label="Game area" role="region">
+        <canvas id="game-canvas" width="480" height="320" tabindex="0" aria-live="polite" aria-atomic="true" aria-describedby="score-board">Your browser does not support canvas.</canvas>
+      </div>
+      <div id="game-hud">
+        <span id="score-display">Score: 0</span>
+        <span id="highscore-display">Highscore: 0</span>
+      </div>
+      <button id="start-btn" aria-label="Start game">Start Game</button>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      // Elements
+      const openBtn = document.getElementById('open-game-btn');
+      const modal = document.getElementById('game-modal');
+      const closeBtn = document.getElementById('close-game-btn');
+      const startBtn = document.getElementById('start-btn');
+      const canvas = document.getElementById('game-canvas');
+      const ctx = canvas.getContext('2d');
+      const scoreDisplay = document.getElementById('score-display');
+      const highscoreDisplay = document.getElementById('highscore-display');
+
+      // Game variables
+      const player = {
+        width: 60,
+        height: 18,
+        x: canvas.width/2 - 30,
+        y: canvas.height - 30,
+        speed: 8,
+        movingLeft: false,
+        movingRight: false,
+        color: '#3399ff',
+      };
+
+      let blocks = [];
+      let blockSpeed = 2.8;
+      let blockSpawnInterval = 1200; // ms
+      let blockSpawnTimer = 0;
+
+      let score = 0;
+      let highscore = 0;
+
+      let gameRunning = false;
+      let lastTimestamp = 0;
+
+      // Load highscore from localStorage
+      function loadHighscore() {
+        const saved = localStorage.getItem('credits-game-highscore');
+        if(saved !== null) {
+          highscore = parseInt(saved, 10) || 0;
+        }
+        updateHighscoreDisplay();
+      }
+
+      function saveHighscore() {
+        localStorage.setItem('credits-game-highscore', highscore.toString());
+      }
+
+      function updateScoreDisplay() {
+        scoreDisplay.textContent = `Score: ${score}`;
+      }
+      function updateHighscoreDisplay() {
+        highscoreDisplay.textContent = `Highscore: ${highscore}`;
+      }
+
+      // Block constructor
+      class Block {
+        constructor(x, width, speed) {
+          this.x = x;
+          this.y = -20;
+          this.width = width;
+          this.height = 18;
+          this.speed = speed;
+          this.color = '#7db3ff';
+        }
+        update(delta) {
+          this.y += this.speed * delta;
+        }
+        draw(ctx) {
+          ctx.fillStyle = this.color;
+          ctx.shadowColor = '#3a6aff';
+          ctx.shadowBlur = 8;
+          ctx.fillRect(this.x, this.y, this.width, this.height);
+          ctx.shadowBlur = 0;
+        }
+        getBounds() {
+          return {x: this.x, y: this.y, width: this.width, height: this.height};
+        }
+        isOffscreen() {
+          return this.y > canvas.height;
+        }
+      }
+
+      // Check collision between player and block
+      function isColliding(rect1, rect2) {
+        return !(
+          rect1.x + rect1.width < rect2.x ||
+          rect1.x > rect2.x + rect2.width ||
+          rect1.y + rect1.height < rect2.y ||
+          rect1.y > rect2.y + rect2.height
+        );
+      }
+
+      // Draw player with glow
+      function drawPlayer() {
+        ctx.fillStyle = player.color;
+        ctx.shadowColor = '#4285ff';
+        ctx.shadowBlur = 16;
+        ctx.fillRect(player.x, player.y, player.width, player.height);
+        ctx.shadowBlur = 0;
+      }
+
+      // Draw all blocks
+      function drawBlocks() {
+        blocks.forEach(block => {
+          block.draw(ctx);
+        });
+      }
+
+      // Update player position based on keys
+      function updatePlayer() {
+        if(player.movingLeft) {
+          player.x -= player.speed;
+          if(player.x < 0) player.x = 0;
+        }
+        if(player.movingRight) {
+          player.x += player.speed;
+          if(player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+        }
+      }
+
+      // Game over
+      function gameOver() {
+        gameRunning = false;
+        startBtn.textContent = 'Restart Game';
+        startBtn.disabled = false;
+        saveHighscore();
+        // Flash red overlay on canvas
+        let flashCount = 0;
+        const flashMax = 5;
+        function flash() {
+          ctx.fillStyle = flashCount % 2 === 0 ? 'rgba(255, 0, 0, 0.35)' : 'rgba(255, 0, 0, 0)';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          flashCount++;
+          if(flashCount <= flashMax * 2) {
+            setTimeout(flash, 120);
+          }
+        }
+        flash();
+      }
+
+      // Reset game state
+      function resetGame() {
+        blocks = [];
+        blockSpeed = 2.8;
+        blockSpawnInterval = 1200;
+        blockSpawnTimer = 0;
+        score = 0;
+        updateScoreDisplay();
+        startBtn.textContent = 'Start Game';
+        startBtn.disabled = false;
+        player.x = canvas.width/2 - player.width/2;
+        drawFrame(0);
+      }
+
+      // Spawn new block at random horizontal position and width
+      function spawnBlock() {
+        const minWidth = 40;
+        const maxWidth = 110;
+        const width = Math.random() * (maxWidth - minWidth) + minWidth;
+
+        // Random horizontal position clamped to canvas width
+        let x = Math.random() * (canvas.width - width);
+        blocks.push(new Block(x, width, blockSpeed));
+      }
+
+      // Main game update loop
+      function update(timestamp) {
+        if(!gameRunning) return;
+        if(!lastTimestamp) lastTimestamp = timestamp;
+        const delta = (timestamp - lastTimestamp) / 16.666; // Normalize to ~60fps frames
+        lastTimestamp = timestamp;
+
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Update blocks
+        blockSpawnTimer += timestamp - (lastTimestamp - delta * 16.666);
+        if(blockSpawnTimer > blockSpawnInterval) {
+          spawnBlock();
+          blockSpawnTimer = 0;
+          // Speed up game every spawn
+          blockSpeed += 0.07;
+          blockSpawnInterval = Math.max(400, blockSpawnInterval - 15);
+        }
+        blocks.forEach(block => block.update(delta));
+
+        // Remove offscreen blocks & increment score
+        blocks = blocks.filter(block => {
+          if(block.isOffscreen()) {
+            score++;
+            updateScoreDisplay();
+            if(score > highscore) {
+              highscore = score;
+              updateHighscoreDisplay();
+            }
+            return false;
+          }
+          return true;
+        });
+
+        // Update player position
+        updatePlayer();
+
+        // Draw everything
+        drawPlayer();
+        drawBlocks();
+
+        // Collision detection
+        let playerBounds = {x: player.x, y: player.y, width: player.width, height: player.height};
+        for(let i=0; i < blocks.length; i++) {
+          if(isColliding(playerBounds, blocks[i].getBounds())) {
+            gameOver();
+            return;
+          }
+        }
+
+        window.requestAnimationFrame(update);
+      }
+
+      // Draw static frame (initial)
+      function drawFrame() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawPlayer();
+        drawBlocks();
+      }
+
+      // Event listeners for player movement
+      function keyDownHandler(e) {
+        if(e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+          player.movingLeft = true;
+        }
+        if(e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+          player.movingRight = true;
+        }
+      }
+      function keyUpHandler(e) {
+        if(e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+          player.movingLeft = false;
+        }
+        if(e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+          player.movingRight = false;
+        }
+      }
+
+      // Modal open/close handlers
+      function openModal() {
+        modal.classList.add('active');
+        modal.focus();
+        document.body.style.overflow = 'hidden';
+        resetGame();
+      }
+      function closeModal() {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        gameRunning = false;
+      }
+
+      openBtn.addEventListener('click', openModal);
+      closeBtn.addEventListener('click', closeModal);
+
+      // Close modal with Escape key
+      document.addEventListener('keydown', e => {
+        if(e.key === 'Escape' && modal.classList.contains('active')) {
+          closeModal();
+        }
+      });
+
+      // Close modal by clicking outside modal-window
+      modal.addEventListener('click', e => {
+        if(e.target === modal) closeModal();
+      });
+
+      // Start game button
+      startBtn.addEventListener('click', () => {
+        if(gameRunning) return; // Prevent multiple starts
+        gameRunning = true;
+        startBtn.disabled = true;
+        lastTimestamp = 0;
+        blocks = [];
+        blockSpeed = 2.8;
+        blockSpawnInterval = 1200;
+        blockSpawnTimer = 0;
+        score = 0;
+        updateScoreDisplay();
+        updateHighscoreDisplay();
+        window.requestAnimationFrame(update);
+      });
+
+      // Listen for player controls when modal is open
+      modal.addEventListener('keydown', e => {
+        if(gameRunning) {
+          if(['ArrowLeft','a','A','ArrowRight','d','D'].includes(e.key)) {
+            e.preventDefault();
+          }
+          keyDownHandler(e);
+        }
+      });
+      modal.addEventListener('keyup', e => {
+        if(gameRunning) {
+          keyUpHandler(e);
+        }
+      });
+
+      // Load highscore on startup
+      loadHighscore();
+      resetGame();
+
+    })();
+  </script>
+</body>
+</html>
+
