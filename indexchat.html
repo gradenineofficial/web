@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chat Guidelines</title>
+<style>
+  /* Reset and base */
+  * {
+    box-sizing: border-box;
+  }
+  body, html {
+    margin: 0; padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+    overflow: hidden;
+  }
+
+  /* Overlay background */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 10, 30, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeInOverlay 0.8s ease forwards;
+    z-index: 9999;
+  }
+
+  /* Popup container */
+  .popup {
+    background: #1e1e2f;
+    border-radius: 12px;
+    border: 2px solid #1e90ff; /* Blue trim */
+    width: 90%;
+    max-width: 420px;
+    padding: 2.5rem 2rem 3.5rem;
+    box-shadow: 0 0 30px rgba(30, 144, 255, 0.6);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    animation: popupEntrance 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    transform-origin: center;
+  }
+
+  /* Heading */
+  h2 {
+    margin-top: 0;
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: #1e90ff;
+    text-align: center;
+    text-shadow: 0 0 8px #1e90ffaa;
+  }
+
+  /* Steps list */
+  ol.steps {
+    margin: 1.5rem 0 2rem 1.25rem;
+    padding: 0;
+    list-style-type: decimal;
+    color: #a0c8ff;
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-shadow: 0 0 6px #1e90ff88;
+  }
+
+  ol.steps li {
+    margin-bottom: 1rem;
+    position: relative;
+    cursor: default;
+  }
+
+  /* Custom step numeral style */
+  ol.steps li::marker {
+    color: #1e90ff;
+    font-weight: 700;
+    text-shadow: 0 0 6px #1e90ffcc;
+  }
+
+  /* OK button */
+  .btn-ok {
+    background-color: #1e90ff;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 40px;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    align-self: center;
+    transition:
+      background-color 0.3s ease,
+      box-shadow 0.3s ease,
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 10px #1e90ff88;
+    user-select: none;
+    will-change: transform, box-shadow;
+    position: absolute;
+    bottom: 1.2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 120px;
+  }
+
+  .btn-ok:hover,
+  .btn-ok:focus {
+    background-color: #3ea0ff;
+    outline: none;
+    box-shadow: 0 0 18px #66b3ff, 0 0 35px #1e90ffcc;
+    transform: translateX(-50%) scale(1.08);
+  }
+
+  .btn-ok:active {
+    transform: translateX(-50%) scale(0.95);
+    box-shadow: 0 0 8px #1e90ffaa;
+  }
+
+  /* Animations */
+  @keyframes fadeInOverlay {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+
+  @keyframes popupEntrance {
+    0% {opacity: 0; transform: translate(-50%, -60%) scale(0.8);}
+    60% {opacity: 1; transform: translate(-50%, -50%) scale(1.05);}
+    100% {opacity: 1; transform: translate(-50%, -50%) scale(1);}
+  }
+
+  @keyframes popupExit {
+    0% {opacity: 1; transform: translate(-50%, -50%) scale(1);}
+    100% {opacity: 0; transform: translate(-50%, -60%) scale(0.8);}
+  }
+</style>
+</head>
+<body>
+  <div class="overlay" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+    <div class="popup" id="popup" style="transform: translate(-50%, -50%); top: 50%; left: 50%; position: absolute;">
+      <h2 id="popup-title">How Do I Enter The Chat?</h2>
+      <ol class="steps">
+        <li>Please enter your username in the website</li>
+        <li>Enter the channel name which is "gradenine"</li>
+        <li>Enter the common password (Not The Password Assigned To You) which is "testificate"</li>
+      </ol>
+      <button class="btn-ok" id="okButton" aria-label="Confirm and proceed">OK</button>
+    </div>
+  </div>
+
+<script>
+  (function(){
+    const popup = document.getElementById('popup');
+    const okButton = document.getElementById('okButton');
+
+    // On OK click: play exit animation, then redirect
+    okButton.addEventListener('click', () => {
+      okButton.disabled = true;
+      popup.style.animation = 'popupExit 0.6s forwards';
+      const overlay = document.querySelector('.overlay');
+      overlay.style.animation = 'fadeInOverlay 0.6s reverse forwards';
+
+      // Redirect after animation ends
+      popup.addEventListener('animationend', () => {
+        // Redirect to desired URL
+        window.location.href = 'https://client.chatcrypt.com/';
+      }, {once: true});
+    });
+
+    // Accessibility: focus on OK button when popup loads
+    window.addEventListener('load', () => {
+      okButton.focus();
+    });
+  })();
+</script>
+</body>
+</html>
